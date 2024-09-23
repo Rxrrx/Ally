@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página Interactiva - Main</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-image: url('Rosa.jpg'); /* Cambia esta línea por la ruta de tu imagen */
+            background-size: cover;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            padding: 10px 20px;
+            background-color: rgba(249, 205, 238, 0.9);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            height: 60px;
+        }
+
+        nav {
+            display: flex;
+            justify-content: flex-end;
+            flex-grow: 1;
+        }
+
+        nav button {
+            background-color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-right: 20px;
+        }
+
+        nav button:hover {
+            background-color: #f3dcdc;
+        }
+
+        .interactive-box {
+            width: 300px;
+            height: 200px;
+            background-color: #fff;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+            margin-top: 100px;
+        }
+
+        .scroll {
+            width: 100%;
+            height: 100%;
+            background-color: #f1e1f4;
+            border: 2px solid #fbdcfb;
+            border-radius: 10px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            transform: translateY(-100%);
+            transition: transform 0.5s ease-in-out;
+            padding: 20px;
+            box-sizing: border-box;
+            font-family: 'Cursive', sans-serif;
+            font-size: 18px;
+            color: #6d4a2a;
+        }
+
+        .interactive-box.active .scroll {
+            transform: translateY(0);
+        }
+
+        /* Confeti */
+        .confetti {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        .confetti-piece {
+            width: 10px;
+            height: 30px;
+            position: absolute;
+            background-color: rosybrown;
+            animation: confettiFall 3s ease-out forwards;
+            opacity: 0;
+        }
+
+        @keyframes confettiFall {
+            0% {
+                transform: rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Mensaje sorpresa */
+        #surprise-message {
+            position: absolute;
+            top: 10px; /* Ajustar posición para que esté un poco más abajo */
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 100px; /* Aumentar tamaño */
+            font-weight: bold;
+            color: white; /* Color del texto */
+            text-shadow: 2px 2px 0px black; /* Borde negro */
+            opacity: 0;
+            transition: opacity 0.5s, transform 0.5s;
+            z-index: 2000;
+            white-space: nowrap;
+        }
+
+        #surprise-message.show {
+            opacity: 1;
+            transform: translateX(-50%) scale(1.1);
+        }
+
+        /* Responsive (compatible con móviles) */
+        @media (max-width: 600px) {
+            .interactive-box {
+                width: 90%;
+                height: 150px;
+                margin-top: 120px;
+            }
+
+            .scroll {
+                font-size: 16px;
+            }
+
+            header {
+                padding: 10px;
+            }
+
+            nav button {
+                font-size: 14px;
+                padding: 8px 15px;
+            }
+
+            #surprise-message {
+                font-size: 50px; /* Ajustar tamaño para móviles */
+                top: 20px; /* Ajustar posición para móviles */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Encabezado con logo y navbar -->
+    <header>
+        <img src="A.R.png" alt="Logo" class="logo">
+        <nav>
+            <button onclick="location.href='ver.html'">Ver</button>
+        </nav>
+    </header>
+
+    <!-- Caja interactiva -->
+    <div class="interactive-box" onclick="toggleScroll()">
+        <div class="scroll">
+            <p style="text-align: center;">Hola Guapa 🫦</p>
+        </div>
+    </div>
+
+    <!-- Mensaje sorpresa -->
+    <div id="surprise-message">¡¡¡Guapa!!!</div>
+
+    <!-- Contenedor de confeti -->
+    <div class="confetti" id="confetti-container"></div>
+
+    <script>
+        function toggleScroll() {
+            const box = document.querySelector('.interactive-box');
+            const surpriseMessage = document.getElementById('surprise-message');
+
+            // Mostrar el pergamino
+            box.classList.toggle('active');
+
+            // Mostrar el mensaje sorpresa
+            surpriseMessage.classList.add('show');
+
+            // Generar confeti
+            generateConfetti();
+
+            // Desactivar el mensaje después de 3 segundos
+            setTimeout(() => {
+                surpriseMessage.classList.remove('show');
+            }, 3000);
+        }
+
+        function generateConfetti() {
+    const confettiContainer = document.getElementById('confetti-container');
+    confettiContainer.innerHTML = ''; // Limpiar confeti anterior
+
+    for (let i = 0; i < 50; i++) { // Generar 50 piezas de confeti
+        const piece = document.createElement('div');
+        piece.className = 'confetti-piece';
+        piece.style.left = `${Math.random() * 100}vw`;
+        piece.style.backgroundColor = ['#ff4d94', '#ff80b3', '#ffb3d9', '#ff99cc', '#ff66b2'][Math.floor(Math.random() * 5)]; // Tonalidades rosadas
+        piece.style.animationDelay = `${Math.random() * 2}s`;
+        piece.style.opacity = 1; // Aseguramos que sea visible
+        confettiContainer.appendChild(piece);
+    }
+}
+
+
+        // Evitar que el confeti aparezca al cargar
+        document.addEventListener('DOMContentLoaded', () => {
+            const confettiPieces = document.querySelectorAll('.confetti-piece');
+            confettiPieces.forEach(piece => {
+                piece.style.opacity = 0; // Ocultar confeti al cargar
+            });
+        });
+    </script>
+
+</body>
+</html>
